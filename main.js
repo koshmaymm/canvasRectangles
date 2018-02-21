@@ -8,16 +8,17 @@ window.onload = function() {
     var ctx = canvas.getContext('2d');
     var arrRectangles = [];
     var count = 0;
-    var timer = 3000;
+    var timer = 1000;
     var width = 40;
     var height = 40;
+    var intervalId;
 
     startButton.addEventListener("click", startAnimate, false);
     stopButton.addEventListener("click", stopAnimate, false);
 
     canvas.addEventListener("click", function(event) {
         var coordinates = getCursorPosition(canvas, event);
-        console.log(coordinates);
+
         for (var i = 0; i < arrRectangles.length; i++) {
 
             if (coordinates.x >= arrRectangles[i].left &&
@@ -33,30 +34,39 @@ window.onload = function() {
 
     function startAnimate() {
         showScore();
-        setInterval(function() {
+        intervalId = setInterval(function() {
             arrRectangles.push(getNewRect());
-        }, timer)
+        }, timer);
         frameId = requestAnimationFrame(animate);
     }
 
     function stopAnimate() {
+        startButton.disabled = false;
         cancelAnimationFrame(frameId);
+        ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientWidth);
+        count = 0;
+        arrRectangles = [];
+        showScore();
+        clearInterval(intervalId);
     }
 
     function animate() {
-        //startButton.disabled = true;
+        startButton.disabled = true;
         ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientWidth);
-        if (arrRectangles.length) {
+        if (arrRectangles.length > 0) {
             for (var j = 0; j < arrRectangles.length; j++) {
-                ctx.fillRect(arrRectangles[j].left, arrRectangles[j].top, width, height);
+                if (arrRectangles[j].top >= canvas.clientHeight) {
+                    arrRectangles.splice(j, 1);
+                    continue;
+                }
+                ctx.beginPath();
                 ctx.fillStyle = arrRectangles[j].color;
                 ctx.shadowColor = 'black';
                 ctx.shadowBlur = 2;
+                ctx.fillRect(arrRectangles[j].left, arrRectangles[j].top, width, height);
                 ctx.fill();
                 arrRectangles[j].top += arrRectangles[j].speed;
-                if (arrRectangles[j].top >= canvas.clientHeight) {
-                    arrRectangles[j].top = 0;
-                }
+
             }
         }
 
@@ -85,13 +95,16 @@ window.onload = function() {
         var newRect = {};
         newRect.left = randomInteger(0, 600);
         newRect.color = randomColor();
-        newRect.speed = randomInteger(1, 2);
+        newRect.speed = randomInteger(1, 5);
         newRect.top = 0;
         return newRect;
     }
 
-
     function showScore() {
         score.innerHTML = count;
+    }
+
+    function changeTimer() {
+        timer = randomInteger(1000, 3500);
     }
 };
