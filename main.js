@@ -9,6 +9,8 @@ window.onload = function() {
     var arrRectangles = [];
     var count = 0;
     var timer = 3000;
+    var width = 40;
+    var height = 40;
 
     startButton.addEventListener("click", startAnimate, false);
     stopButton.addEventListener("click", stopAnimate, false);
@@ -19,9 +21,9 @@ window.onload = function() {
         for (var i = 0; i < arrRectangles.length; i++) {
 
             if (coordinates.x >= arrRectangles[i].left &&
-                coordinates.x <= arrRectangles[i].left + 40 &&
+                coordinates.x <= arrRectangles[i].left + width &&
                 coordinates.y >= arrRectangles[i].top &&
-                coordinates.y <= arrRectangles[i].top + 40) {
+                coordinates.y <= arrRectangles[i].top + height) {
                 arrRectangles.splice(i, 1);
                 count++;
                 showScore();
@@ -46,7 +48,7 @@ window.onload = function() {
         ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientWidth);
         if (arrRectangles.length) {
             for (var j = 0; j < arrRectangles.length; j++) {
-                ctx.fillRect(arrRectangles[j].left, arrRectangles[j].top, 40, 40);
+                ctx.fillRect(arrRectangles[j].left, arrRectangles[j].top, width, height);
                 ctx.fillStyle = arrRectangles[j].color;
                 ctx.shadowColor = 'black';
                 ctx.shadowBlur = 2;
