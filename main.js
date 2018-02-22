@@ -36,7 +36,7 @@ window.onload = function() {
         showScore();
         intervalId = setInterval(function() {
             arrRectangles.push(getNewRect());
-        }, timer);
+        }, randomInteger(500, 3500))
         frameId = requestAnimationFrame(animate);
     }
 
@@ -66,10 +66,8 @@ window.onload = function() {
                 ctx.fillRect(arrRectangles[j].left, arrRectangles[j].top, width, height);
                 ctx.fill();
                 arrRectangles[j].top += arrRectangles[j].speed;
-
             }
         }
-
         frameId = requestAnimationFrame(animate);
     }
 
@@ -102,9 +100,5 @@ window.onload = function() {
 
     function showScore() {
         score.innerHTML = count;
-    }
-
-    function changeTimer() {
-        timer = randomInteger(1000, 3500);
     }
 };
